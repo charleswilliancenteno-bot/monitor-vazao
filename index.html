@@ -1,7 +1,63 @@
-<div id="resultado" class="card-resultado" style="display:none;">
-  <h3>Resultado da Medição</h3>
-  <p><strong>Variação de Nível:</strong> <span id="resDeltaH">0</span> mm</p>
-  <p><strong>Volume Carregado:</strong> <span id="resVolumeL">0</span> L (<span id="resVolumeM3">0</span> m³)</p>
-  <p><strong>Vazão Real:</strong> <span id="resVazaoLh">0</span> L/h (<span id="resVazaoM3h">0</span> m³/h)</p>
-  <p><strong>Eficiência da Bomba:</strong> <span id="resEficiencia">0</span>%</p>
-</div>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monitor de Vazão de Tanques</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Monitor de Vazão de Tanque</h2>
+    
+    <div class="form-group">
+      <label for="fatorTanque">Fator do Tanque (L/mm):</label>
+      <input type="number" id="fatorTanque" value="183" step="0.1">
+    </div>
+
+    <div class="form-group">
+      <label for="vazaoBomba">Vazão Nominal Bomba (m³/h):</label>
+      <input type="number" id="vazaoBomba" value="150" step="0.1">
+    </div>
+
+    <hr>
+
+    <div class="form-group">
+      <label for="alturaInicial">Altura Inicial (mm):</label>
+      <input type="number" id="alturaInicial" placeholder="Ex: 1000">
+    </div>
+
+    <div class="form-group">
+      <label for="horaInicial">Data / Hora Inicial:</label>
+      <input type="datetime-local" id="horaInicial">
+    </div>
+
+    <div class="form-group">
+      <label for="alturaFinal">Altura Final (mm):</label>
+      <input type="number" id="alturaFinal" placeholder="Ex: 1400">
+    </div>
+
+    <div class="form-group">
+      <label for="horaFinal">Data / Hora Final:</label>
+      <input type="datetime-local" id="horaFinal">
+    </div>
+
+    <button onclick="calcularEGravar()">Calcular e Salvar Medição</button>
+
+    <div id="resultado" class="card-resultado" style="display:none;">
+      <h3>Resultado da Medição</h3>
+      <p><strong>Variação de Nível:</strong> <span id="resDeltaH">0</span> mm</p>
+      <p><strong>Volume Carregado:</strong> <span id="resVolumeL">0</span> L (<span id="resVolumeM3">0</span> m³)</p>
+      <p><strong>Vazão Real:</strong> <span id="resVazaoLh">0</span> L/h (<span id="resVazaoM3h">0</span> m³/h)</p>
+      <p><strong>Eficiência da Bomba:</strong> <span id="resEficiencia">0</span>%</p>
+    </div>
+
+    <div style="margin-top:25px;">
+      <h3 style="margin-bottom:10px;">Histórico de Medições</h3>
+      <ul id="historicoList"></ul>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
