@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculador de Vazão de Tanques</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Monitor de Vazão de Tanque</h2>
+    
+    <div class="form-group">
+      <label>Fator do Tanque (L/mm):</label>
+      <input type="number" id="fatorTanque" value="183">
+    </div>
+
+    <div class="form-group">
+      <label>Vazão Nominal Bomba (m³/h):</label>
+      <input type="number" id="vazaoBomba" value="150">
+    </div>
+
+    <hr>
+
+    <div class="form-group">
+      <label>Altura Inicial (mm):</label>
+      <input type="number" id="alturaInicial" placeholder="Ex: 1000">
+    </div>
+
+    <div class="form-group">
+      <label>Hora Inicial:</label>
+      <input type="datetime-local" id="horaInicial">
+    </div>
+
+    <div class="form-group">
+      <label>Altura Final (mm):</label>
+      <input type="number" id="alturaFinal" placeholder="Ex: 1400">
+    </div>
+
+    <div class="form-group">
+      <label>Hora Final:</label>
+      <input type="datetime-local" id="horaFinal">
+    </div>
+
+    <button onclick="calcularEGravar()">Calcular e Salvar</button>
+
+    <div id="resultado" class="card-resultado" style="display:none;">
+      <h3>Resultado da Medição</h3>
+      <p><strong>Variação de Nível:</strong> <span id="resDeltaH">0</span> mm</p>
+      <p><strong>Volume Carregado:</strong> <span id="resVolume">0</span> L</p>
+      <p><strong>Vazão Real:</strong> <span id="resVazaoLh">0</span> L/h (<span id="resVazaoM3h">0</span> m³/h)</p>
+      <p><strong>Eficiência da Bomba:</strong> <span id="resEficiencia">0</span>%</p>
+    </div>
+
+    <h3>Histórico de Medições</h3>
+    <ul id="historicoList"></ul>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
