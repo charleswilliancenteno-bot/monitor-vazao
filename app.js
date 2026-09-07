@@ -13,12 +13,13 @@ function calcularEGravar() {
 
   const deltaH = hFim - hIni;
   const volumeLitros = deltaH * fator;
+  const volumeM3 = volumeLitros / 1000;
   
   // Diferença de tempo em horas
   const horas = (tFim - tIni) / (1000 * 60 * 60);
 
   if (horas <= 0) {
-    alert("A hora final deve ser maior que a hora inicial.");
+    alert("A hora final deve ser posterior à hora inicial.");
     return;
   }
 
@@ -28,16 +29,18 @@ function calcularEGravar() {
 
   // Exibir resultados na tela
   document.getElementById('resDeltaH').innerText = deltaH.toFixed(1);
-  document.getElementById('resVolume').innerText = volumeLitros.toLocaleString('pt-BR');
+  document.getElementById('resVolumeL').innerText = volumeLitros.toLocaleString('pt-BR');
+  document.getElementById('resVolumeM3').innerText = volumeM3.toFixed(2);
   document.getElementById('resVazaoLh').innerText = vazaoLh.toFixed(0).toLocaleString('pt-BR');
   document.getElementById('resVazaoM3h').innerText = vazaoM3h.toFixed(2);
   document.getElementById('resEficiencia').innerText = eficiencia.toFixed(1);
   document.getElementById('resultado').style.display = 'block';
 
-  // Salvar no banco de dados local do celular (localStorage)
+  // Salvar no histórico local
   const medicao = {
-    data: new Date().toLocaleDateString('pt-BR'),
+    data: new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}),
     vazaoM3h: vazaoM3h.toFixed(2),
+    volumeM3: volumeM3.toFixed(2),
     eficiencia: eficiencia.toFixed(1)
   };
 
@@ -56,12 +59,30 @@ function renderHistorico() {
   let historico = JSON.parse(localStorage.getItem('historicoVazao')) || [];
   lista.innerHTML = '';
 
+  if(historico.length === 0) {
+    lista.innerHTML = '<li style="color:#a0aec0; text-align:center;">Nenhuma medição registrada ainda.</li>';
+    return;
+  }
+
   historico.slice(0, 5).forEach(med => {
     const li = document.createElement('li');
-    li.innerHTML = `Data: <strong>${med.data}</strong> — Vazão: <strong>${med.vazaoM3h} m³/h</strong> (Eficiência: ${med.eficiencia}%)`;
+    const volM3Text = med.volumeM3 ? ` | Vol: <strong>${med.volumeM3} m³</strong>` : '';
+    li.innerHTML = `<strong>${med.data}</strong><br>Vazão: <strong>${med.vazaoM3h} m³/h</strong>${volM3Text} | Eficiência: <strong>${med.eficiencia}%</strong>`;
     lista.appendChild(li);
   });
 }
 
-// Carregar histórico ao abrir a página
-window.onload = renderHistorico;
+window.onload = function() {
+  const agora = new Date();
+  const umaHoraAtras = new Date(agora.getTime() - (60 * 60 * 1000));
+  
+  const toLocalISO = (dt) => {
+    const tzOffset = dt.getTimezoneOffset() * 60000;
+    return new Date(dt.getTime() - tzOffset).toISOString().slice(0, 16);
+  };
+
+  document.getElementById('horaInicial').value = toLocalISO(umaHoraAtras);
+  document.getElementById('horaFinal').value = toLocalISO(agora);
+
+  renderHistorico();
+};
